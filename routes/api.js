@@ -2,7 +2,7 @@
 const fetch = require('cross-fetch');
 const Stock = require('../db').Stock;
 
-/*
+/**
 Example stockdata
 stockdata:  {
   avgTotalVolume: 1472799,
@@ -63,6 +63,7 @@ stockdata:  {
   isUSMarketOpen: true
 }
 */
+
 const isObj = (obj) => obj != null && obj.constructor.name === 'Object';
 
 const createStockLink = (stock) =>
@@ -125,13 +126,24 @@ module.exports = function (app) {
             return {
               stock: data.symbol,
               price: data.latestPrice,
-              like: (document && document.likes.length) || 0,
+              likes: (document && document.likes.length) || 0,
             };
           }
         )
       );
 
-      console.log(`result: ${JSON.stringify(result)}`);
+      if (result.length === 2) {
+        let [data1, data2] = result;
+
+        data1.rel_likes = data1.likes - data2.likes;
+        data2.rel_likes = data2.likes - data1.likes;
+        delete data1.likes;
+        delete data2.likes;
+
+        return res.json({ stockData: [...result] });
+      } else {
+        return res.json({ stockData: { ...result[0] } });
+      }
     } catch (err) {
       res.json({ stockData: err, likes: null });
     }
