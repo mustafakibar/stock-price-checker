@@ -21,8 +21,7 @@ const Stock = mongoose.model(
   'stock',
   new Schema({
     name: { type: String, required: true },
-    like: Boolean,
-    ips: [String],
+    likes: [String],
   })
 );
 
