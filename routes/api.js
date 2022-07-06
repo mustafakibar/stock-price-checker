@@ -2,6 +2,8 @@
 const fetch = require('cross-fetch');
 const Stock = require('../db').Stock;
 
+const PATH_API = process.env.PATH_API;
+
 /**
 Example stockdata
 stockdata:  {
@@ -97,8 +99,8 @@ const fetchStocks = async (stock) => {
   }
 };
 
-module.exports = function (app) {
-  app.route('/api/stock-prices').get(async (req, res) => {
+module.exports = (app) => {
+  app.route(PATH_API).get(async (req, res) => {
     console.log(`query: ${JSON.stringify(req.query)}`);
 
     const { stock, like } = req.query;
