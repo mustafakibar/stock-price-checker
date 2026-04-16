@@ -8,7 +8,7 @@ Express + MongoDB app that returns live stock prices and tallies per-IP "likes",
 - `GET /api/stock-prices?stock=<S1>&stock=<S2>` — fetches two stocks and returns relative like counts (`rel_likes`)
 - `GET /api/stock-prices?stock=<SYMBOL>&like=true` — records a "like" for the symbol keyed to the requester's IP address (one like per IP)
 - Per-IP deduplication is enforced by storing IP addresses in a MongoDB set (`$addToSet`)
-- Helmet `contentSecurityPolicy` restricts scripts and styles to same-origin sources
+- Helmet `contentSecurityPolicy` restricts default, script, and style sources (scripts and styles also permit `'unsafe-inline'` to satisfy the FCC challenge)
 - Functional tests cover single stock, like, and two-stock comparison paths
 
 ## Tech Stack
@@ -33,12 +33,12 @@ yarn install
 
 ## Environment Variables
 
-Derived from `.env`:
+Create a `.env` file in the project root with:
 
 - `PORT` — server port (defaults to `3000`)
 - `NODE_ENV` — `development` | `test` | `production`
 - `DB` — MongoDB connection string
-- `PATH_API` — API route path (e.g. `/api/stock-prices`)
+- `PATH_API` (**required**) — API route path (canonical value: `/api/stock-prices`)
 
 ## Usage
 
